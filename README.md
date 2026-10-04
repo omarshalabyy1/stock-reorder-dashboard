@@ -10,7 +10,7 @@
   <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Compose">
 </p>
 
-## 😣 The problem
+## The problem
 
 Best sellers run out before anyone notices, while slow items fill the shelves. Stock is counted by
 hand once a week, and every item is topped up to the same shelf level whatever it sells. The fast
