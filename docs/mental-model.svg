@@ -1,0 +1,65 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 450" width="1000" height="450" role="img" aria-label="How a reorder alert works: one item's stock over a month. The stock falls to the reorder point and the alert fires in the 7am email; acted on, the delivery lands 4 days later, before the safety stock is used up. Later the stock falls faster, the alert fires again but nobody orders, and seven days later the shelf is empty: an order the morning after the alert would have landed first, so the rule flagged that stock-out in time.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="0.55" stop-color="#10213A"/>
+      <stop offset="1" stop-color="#1E1B4B"/>
+    </linearGradient>
+  </defs>
+  <style>
+    text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
+    .title { font-size: 21px; font-weight: 700; fill: #FFFFFF; }
+    .sub { font-size: 13.5px; fill: #CBD5E1; }
+    .lbl { font-size: 13px; fill: #CBD5E1; }
+    .hot { font-size: 13px; font-weight: 700; fill: #F59E0B; }
+    .cap { font-size: 13px; fill: #94A3B8; }
+    .axis { stroke: #475569; stroke-width: 1.5; }
+    .stock { fill: none; stroke: #FFFFFF; stroke-width: 3; stroke-linejoin: round; }
+    .rop { stroke: #F59E0B; stroke-width: 2; stroke-dasharray: 7 6; }
+    .safety { stroke: #64748B; stroke-width: 2; stroke-dasharray: 3 5; }
+    .brace { fill: none; stroke: #F59E0B; stroke-width: 1.5; }
+    .pulse { animation: pulse 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes pulse { 50% { transform: scale(1.8); opacity: 0.3; } }
+  </style>
+
+  <rect width="1000" height="450" rx="22" fill="url(#bg)"/>
+  <text x="50" y="52" class="title">How a reorder alert works</text>
+  <text x="50" y="76" class="sub">One item's stock over a month. Every night the rules compare it with two lines.</text>
+
+  <!-- axes: 30 days from x=90 to x=950, empty shelf at y=330 -->
+  <line x1="90" y1="105" x2="90" y2="330" class="axis"/>
+  <line x1="90" y1="330" x2="950" y2="330" class="axis"/>
+  <text x="70" y="220" class="cap" text-anchor="middle" transform="rotate(-90 70 220)">Stock on the shelf</text>
+  <text x="950" y="350" class="cap" text-anchor="end">Days</text>
+
+  <!-- the two lines -->
+  <line x1="90" y1="215" x2="950" y2="215" class="rop"/>
+  <line x1="90" y1="285" x2="950" y2="285" class="safety"/>
+  <text x="100" y="207" class="hot">Reorder point</text>
+  <text x="100" y="277" class="lbl">Safety stock</text>
+
+  <!-- the empty-shelf days -->
+  <rect x="801" y="296" width="86" height="34" fill="#F59E0B" fill-opacity="0.18"/>
+  <text x="844" y="318" class="hot" text-anchor="middle">Empty</text>
+
+  <!-- the stock -->
+  <path class="stock" d="M90 120 L330 215 L445 260 L445 125 L602 215 L801 330 L887 330 L887 150 L950 175"/>
+
+  <!-- first cycle: alert, acted on -->
+  <circle cx="330" cy="215" r="7" fill="#F59E0B"/>
+  <circle cx="330" cy="215" r="7" fill="#F59E0B" class="pulse"/>
+  <text x="318" y="240" class="hot" text-anchor="end">Alert in the 7am email</text>
+  <text x="455" y="117" class="lbl">Delivery, 4 days later</text>
+  <path class="brace" d="M330 342v8h115v-8"/>
+  <text x="388" y="370" class="lbl" text-anchor="middle">4 days to deliver</text>
+
+  <!-- second cycle: alert, not acted on -->
+  <circle cx="602" cy="215" r="7" fill="#F59E0B"/>
+  <circle cx="602" cy="215" r="7" fill="#F59E0B" class="pulse"/>
+  <text x="614" y="205" class="hot">Alert again, faster sales</text>
+  <path class="brace" d="M602 342v8h199v-8"/>
+  <text x="702" y="370" class="lbl" text-anchor="middle">7 days of warning</text>
+
+  <text x="50" y="408" class="cap">Left: acted on, the order lands before the safety stock is used up.</text>
+  <text x="50" y="428" class="cap">Right: the backtest. Nobody ordered and the shelf ran empty, but an order the morning after the flag would have landed first: flagged in time.</text>
+</svg>

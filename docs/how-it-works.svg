@@ -1,0 +1,70 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 290" width="1000" height="290" role="img" aria-label="How it works: 01 Load, sales and stock per store and item into Postgres; 02 Forecast, daily demand per item from the last 28 days; 03 Rules, days of cover, reorder point and safety stock, written once in SQL; 04 Alert, a 7am email with what to reorder and how many; 05 Report, Power BI shows what is at risk, overstocked or dead.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="0.55" stop-color="#10213A"/>
+      <stop offset="1" stop-color="#1E1B4B"/>
+    </linearGradient>
+  </defs>
+  <style>
+    text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
+    .title { font-size: 21px; font-weight: 700; fill: #FFFFFF; }
+    .sub { font-size: 13.5px; fill: #CBD5E1; }
+    .num { font-size: 13px; font-weight: 700; fill: #FFFFFF; }
+    .step { font-size: 16px; font-weight: 700; fill: #FFFFFF; }
+    .desc { font-size: 13px; fill: #94A3B8; }
+    .box { fill: #F59E0B; fill-opacity: 0.07; stroke: #F59E0B; stroke-opacity: 0.6; }
+    .dot { fill: #F59E0B; fill-opacity: 0.35; }
+    .link { fill: none; stroke: #64748B; stroke-width: 2; stroke-dasharray: 4 6; animation: flow 1.6s linear infinite; }
+    @keyframes flow { to { stroke-dashoffset: -20; } }
+  </style>
+
+  <rect width="1000" height="290" rx="22" fill="url(#bg)"/>
+  <text x="50" y="52" class="title">How it works</text>
+  <text x="50" y="76" class="sub">Airflow runs steps 1 to 4 every morning at 7am. Power BI reads the same rules.</text>
+
+  <path class="link" d="M210 175h25"/>
+  <path class="link" d="M395 175h25"/>
+  <path class="link" d="M580 175h25"/>
+  <path class="link" d="M765 175h25"/>
+
+  <rect x="50" y="105" width="160" height="140" rx="14" class="box"/>
+  <circle cx="80" cy="138" r="16" class="dot"/>
+  <text x="80" y="143" class="num" text-anchor="middle">01</text>
+  <text x="104" y="144" class="step">Load</text>
+  <text x="66" y="182" class="desc">Sales and stock</text>
+  <text x="66" y="201" class="desc">per store and item</text>
+  <text x="66" y="220" class="desc">into Postgres</text>
+
+  <rect x="235" y="105" width="160" height="140" rx="14" class="box"/>
+  <circle cx="265" cy="138" r="16" class="dot"/>
+  <text x="265" y="143" class="num" text-anchor="middle">02</text>
+  <text x="289" y="144" class="step">Forecast</text>
+  <text x="251" y="182" class="desc">Daily demand per</text>
+  <text x="251" y="201" class="desc">item from the last</text>
+  <text x="251" y="220" class="desc">28 days of sales</text>
+
+  <rect x="420" y="105" width="160" height="140" rx="14" class="box"/>
+  <circle cx="450" cy="138" r="16" class="dot"/>
+  <text x="450" y="143" class="num" text-anchor="middle">03</text>
+  <text x="474" y="144" class="step">Rules</text>
+  <text x="436" y="182" class="desc">Days of cover,</text>
+  <text x="436" y="201" class="desc">reorder point, safety</text>
+  <text x="436" y="220" class="desc">stock: once, in SQL</text>
+
+  <rect x="605" y="105" width="160" height="140" rx="14" class="box"/>
+  <circle cx="635" cy="138" r="16" class="dot"/>
+  <text x="635" y="143" class="num" text-anchor="middle">04</text>
+  <text x="659" y="144" class="step">Alert</text>
+  <text x="621" y="182" class="desc">A 7am email: what</text>
+  <text x="621" y="201" class="desc">to reorder today</text>
+  <text x="621" y="220" class="desc">and how many</text>
+
+  <rect x="790" y="105" width="160" height="140" rx="14" class="box"/>
+  <circle cx="820" cy="138" r="16" class="dot"/>
+  <text x="820" y="143" class="num" text-anchor="middle">05</text>
+  <text x="844" y="144" class="step">Report</text>
+  <text x="806" y="182" class="desc">Power BI: what is</text>
+  <text x="806" y="201" class="desc">at risk, overstocked</text>
+  <text x="806" y="220" class="desc">or dead</text>
+</svg>

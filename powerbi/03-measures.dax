@@ -1,0 +1,75 @@
+// 3. Measures. For each one: select the StockRule table > New measure > paste from the measure's
+// name to the end of its expression > set the format string given in its comment > set its display
+// folder (Model view > Properties > Display folder).
+
+
+// ===================== Display folder: Day =====================
+// One day: the day picked in the date slicer. These are the morning's numbers.
+
+// The day the page shows: the one picked in the date slicer, else the last day in view. Format: d mmm yyyy
+Selected Day = MAX ( 'Date'[Date] )
+
+// Store-items on the reorder list that day (stock plus orders on the way at or under the reorder point). Format: #,0
+Items to Reorder =
+VAR Day = [Selected Day]
+RETURN
+    CALCULATE ( COUNTROWS ( StockRule ), StockRule[order_qty] > 0, 'Date'[Date] = Day )
+
+// Units the reorder list says to order that day, all items together. Format: #,0
+Units to Order =
+VAR Day = [Selected Day]
+RETURN
+    CALCULATE ( SUM ( StockRule[order_qty] ), 'Date'[Date] = Day )
+
+// Store-items whose shelf closed empty that day. Format: #,0
+Out of Stock Items =
+VAR Day = [Selected Day]
+RETURN
+    CALCULATE ( COUNTROWS ( StockRule ), StockRule[on_hand] = 0, 'Date'[Date] = Day )
+
+// Store-items that day (500 when no store or status is picked); split by status in the status chart. Format: #,0
+Store Items =
+VAR Day = [Selected Day]
+RETURN
+    CALCULATE ( COUNTROWS ( StockRule ), 'Date'[Date] = Day )
+
+// Value of the stock on the shelves at closing that day, at cost. Format: #,0
+Stock Value =
+VAR Day = [Selected Day]
+RETURN
+    CALCULATE ( SUM ( StockRule[stock_value] ), 'Date'[Date] = Day )
+
+// Stock value in slow stock that day: items with more than 30 days of cover. Format: #,0
+Slow Stock Value = CALCULATE ( [Stock Value], Status[status] = "Overstock" )
+
+// Share of that day's stock value sitting in slow stock; per month it is the month-end share. Format: 0.0%
+Slow Stock Share =
+VAR Slow = [Slow Stock Value]
+VAR AllStock = CALCULATE ( [Stock Value], REMOVEFILTERS ( Status ) )
+RETURN
+    DIVIDE ( Slow, AllStock )
+
+
+// ===================== Display folder: History =====================
+// Over the days in view (the date range slicer on page 2).
+
+// Units sold over the days in view. Format: #,0
+Units Sold = SUM ( StockRule[units_sold] )
+
+// Days a shelf closed empty, counted per store and item. Format: #,0
+Empty Shelf Days =
+VAR EmptyRows = CALCULATE ( COUNTROWS ( StockRule ), StockRule[on_hand] = 0 )
+RETURN
+    COALESCE ( EmptyRows, 0 )
+
+// Stock on the shelf at closing (one store and item: that shelf; more: added up). Format: #,0
+Stock On Hand = SUM ( StockRule[on_hand] )
+
+// The reorder point (one store and item: that shelf's line). Format: #,0
+Reorder Point = SUM ( StockRule[reorder_point] )
+
+// The safety stock (one store and item: that shelf's line). Format: #,0
+Safety Stock = SUM ( StockRule[safety_stock] )
+
+// Stock on the days the item was on the reorder list, blank on the others: the chart's alert dots. Format: #,0
+Stock When Flagged = CALCULATE ( [Stock On Hand], StockRule[order_qty] > 0 )

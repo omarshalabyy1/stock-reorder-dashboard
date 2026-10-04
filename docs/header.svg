@@ -1,0 +1,35 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1000 260" width="1000" height="260" role="img" aria-label="Stock reorder dashboard. 913,000 sales rows: 1,643 stock-outs flagged in time to order, and 37% of stock value found in slow stock. A stock line falls past a dashed reorder point while an alert dot pulses.">
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#0B1220"/>
+      <stop offset="0.55" stop-color="#10213A"/>
+      <stop offset="1" stop-color="#1E1B4B"/>
+    </linearGradient>
+  </defs>
+  <style>
+    text { font-family: "Segoe UI", -apple-system, Helvetica, Arial, sans-serif; }
+    .name { font-size: 34px; font-weight: 800; fill: #FFFFFF; }
+    .result { font-size: 17px; fill: #CBD5E1; }
+    .hot { fill: #F59E0B; font-weight: 700; }
+    .tag { font-size: 13px; fill: #94A3B8; letter-spacing: 1.5px; }
+    .stock { fill: none; stroke: #FFFFFF; stroke-width: 2.5; stroke-linejoin: round; }
+    .pulse { animation: pulse 1.6s ease-in-out infinite; transform-box: fill-box; transform-origin: center; }
+    @keyframes pulse { 50% { transform: scale(2); opacity: 0.25; } }
+  </style>
+
+  <rect width="1000" height="260" rx="22" fill="url(#bg)"/>
+
+  <text x="50" y="66" class="tag">PROJECT · STOCK REORDER DASHBOARD</text>
+  <text x="50" y="118" class="name">Reorder before the shelf is empty</text>
+  <text x="50" y="160" class="result">913,000 sales rows: <tspan class="hot">1,643 stock-outs flagged in time</tspan> to order,</text>
+  <text x="50" y="186" class="result">and <tspan class="hot">37% of stock value</tspan> found in slow stock.</text>
+  <text x="50" y="226" class="tag">POSTGRESQL · PYTHON · AIRFLOW · POWER BI</text>
+
+  <!-- a week of stock against the reorder point -->
+  <line x1="700" y1="150" x2="950" y2="150" stroke="#F59E0B" stroke-width="2" stroke-dasharray="6 5"/>
+  <path class="stock" d="M700 70 L790 150 L840 195 L840 80 L885 150 L930 205 L950 205"/>
+  <circle cx="790" cy="150" r="6" fill="#F59E0B"/>
+  <circle cx="790" cy="150" r="6" fill="#F59E0B" class="pulse"/>
+  <circle cx="885" cy="150" r="6" fill="#F59E0B"/>
+  <circle cx="885" cy="150" r="6" fill="#F59E0B" class="pulse"/>
+</svg>

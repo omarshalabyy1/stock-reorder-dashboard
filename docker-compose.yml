@@ -1,0 +1,78 @@
+# stock-reorder-dashboard: the warehouse (Postgres), Airflow (scheduler, DAG processor and API server
+# in one container) and Airflow's own records (runs, tasks, schedules) in a Postgres of their own.
+# Everything listens on 127.0.0.1 only. The records are kept apart from the warehouse: when a busy
+# laptop makes Airflow kill one of its processes, Postgres restarts every connection, and in a shared
+# Postgres that stopped the warehouse load halfway (2026-10-05). Not SQLite: its file locks when
+# Airflow's parts write at once.
+#
+#   docker compose up -d     # Airflow http://127.0.0.1:8097 (no login), warehouse localhost:5447
+#   docker compose down      # stops everything; the volumes (warehouse, run history) stay
+#
+# The email settings come from .env (gitignored; see .env.example). Without them the email is
+# only saved to out/.
+
+name: stock-reorder
+
+services:
+  warehouse:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: stock
+      POSTGRES_PASSWORD: stock      # local only, public and generated data (pipeline.py)
+      POSTGRES_DB: stock
+    ports:
+      - "127.0.0.1:5447:5432"
+    volumes:
+      - warehouse-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U stock -d stock"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  airflow-db:
+    image: postgres:17
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: airflow
+      POSTGRES_PASSWORD: airflow    # not published to the laptop, only Airflow reaches it
+      POSTGRES_DB: airflow
+    volumes:
+      - airflow-db-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U airflow -d airflow"]
+      interval: 5s
+      timeout: 5s
+      retries: 20
+
+  airflow:
+    image: apache/airflow:3.3.2-python3.10
+    # Airflow's parts as separate processes: when one stops, the container exits and Docker starts
+    # it again (`airflow standalone` can keep running with a dead scheduler).
+    command: >-
+      bash -c "airflow db migrate && { airflow scheduler & airflow dag-processor & airflow api-server --port 8080 & wait -n; exit 1; }"
+    restart: unless-stopped
+    environment:
+      WAREHOUSE_HOST: warehouse
+      WAREHOUSE_PORT: "5432"
+      GMAIL_USER: ${GMAIL_USER:-}
+      GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD:-}
+      MAIL_TO: ${MAIL_TO:-}
+      AIRFLOW__CORE__LOAD_EXAMPLES: "false"
+      AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "true"
+      AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow
+    ports:
+      - "127.0.0.1:8097:8080"
+    volumes:
+      - ./dags:/opt/airflow/dags
+      - .:/opt/stock-reorder
+    depends_on:
+      warehouse:
+        condition: service_healthy
+      airflow-db:
+        condition: service_healthy
+
+volumes:
+  warehouse-data:
+  airflow-db-data:
