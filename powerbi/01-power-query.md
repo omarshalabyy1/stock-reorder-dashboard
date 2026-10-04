@@ -1,8 +1,11 @@
 # 1. Power Query
 
-The report reads the local warehouse: PostgreSQL on `localhost:5447`, database `stock`, after
+The report reads the local warehouse: PostgreSQL on `127.0.0.1:5447`, database `stock`, after
 `docker compose up -d` and one run of the `stock_reorder` DAG (steps 1 to 4 of
 `08-build-checklist.md`). Nothing is read from files.
+
+Why `127.0.0.1` and not `localhost`: Docker binds the warehouse to `127.0.0.1` only, and on
+Windows `localhost` can resolve to the IPv6 address first, where nothing listens.
 
 Open Power BI Desktop, then **Home > Transform data** to open the Power Query editor. For each query
 below: **Home > New source > Blank query**, rename it (right-click > Rename) to the name in the
@@ -31,7 +34,7 @@ The three small tables (`Date`, `Store`, `Status`) are DAX tables made in the mo
 Power BI asks three things the first time a query runs:
 
 1. **Credentials:** choose **Database**, user name `stock`, password `stock` (the local warehouse in
-   `docker-compose.yml`, reachable only from this laptop), level `localhost:5447;stock`, **Connect**.
+   `docker-compose.yml`, reachable only from this laptop), level `127.0.0.1:5447;stock`, **Connect**.
 2. **Encryption:** the local warehouse has no SSL certificate. If Power BI says it could not connect
    with an encrypted connection, choose **OK** to connect without encryption.
 3. **Native database query:** "Permission is required to run this native database query" > **Run**.
@@ -44,7 +47,7 @@ The fact table: one row per day, store and item, with that day's closing stock j
 ```m
 let
     Source = PostgreSQL.Database(
-        "localhost:5447",
+        "127.0.0.1:5447",
         "stock",
         [Query = "SELECT date, store, item, units_sold, units_received, on_hand, on_order,
                          stock_value, daily_demand, safety_stock, reorder_point, days_of_cover,
@@ -95,7 +98,7 @@ One row per item with its unit cost. 50 rows.
 ```m
 let
     Source = PostgreSQL.Database(
-        "localhost:5447",
+        "127.0.0.1:5447",
         "stock",
         [Query = "SELECT item, unit_cost FROM item"]
     ),
