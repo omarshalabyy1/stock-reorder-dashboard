@@ -86,8 +86,9 @@ morning's list is empty. The email here is a summer Sunday's, 16 July 2017:
 
 Three pages: the **reorder list** for a picked day, **stock vs reorder point** for one shelf (the
 mental model above, drawn from the data), and **slow stock**. The [`powerbi/`](powerbi/) folder
-builds it from nothing, by copy and paste: every query, the model, every measure, each visual with
-its fields, the theme, and the numbers each card must show.
+builds it from nothing, by copy and paste: both queries, the model, 14 measures, 27 visuals with
+their fields and positions, every interaction, the shared theme, the numbers each card must show,
+and a 33-step build checklist.
 
 _Screenshots of the finished pages go here._
 

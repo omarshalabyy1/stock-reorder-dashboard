@@ -1,75 +1,112 @@
-// 3. Measures. For each one: select the StockRule table > New measure > paste from the measure's
-// name to the end of its expression > set the format string given in its comment > set its display
-// folder (Model view > Properties > Display folder).
+// 3. Measures
+//
+// First create the measures table: Home > Enter data, name the table _Measures, keep the one
+// empty column, Load. Then for each measure below: select _Measures, Home > New measure, paste
+// the measure (from its name to the end of its expression), press Enter, and set the format
+// string (Measure tools > Format, or type it in the format box) and the display folder
+// (Properties pane > Display folder). Create them in the order of this file: a measure
+// can only use measures made before it. When all 14 measures exist, hide the empty column;
+// _Measures moves to the top of the field list.
+//
+// Each measure's comment says what it returns, its format string and its display folder.
+// Cards and charts use these measures only. The reorder list table (page 1, visual 9) shows
+// five StockRule columns shelf by shelf (02-model.md, "Don't summarize"). There are no
+// calculated columns; the three DAX tables are in 02-model.md.
+//
+// "The day" below is the day picked in the Day slicer (pages 1 and 3). With no day picked, or
+// on a month axis, it is the last day in view: the month-end on page 3's line chart.
 
 
-// ===================== Display folder: Day =====================
-// One day: the day picked in the date slicer. These are the morning's numbers.
+// ---------- Page 1: Reorder list (display folder: 1 Reorder list) ----------
 
-// The day the page shows: the one picked in the date slicer, else the last day in view. Format: d mmm yyyy
-Selected Day = MAX ( 'Date'[Date] )
+// The day the page shows: the one picked in the Day slicer, else the last day in view.
+// Format: d mmm yyyy  Folder: 1 Reorder list
+Selected Day =
+MAX ( 'Date'[Date] )
 
-// Store-items on the reorder list that day (stock plus orders on the way at or under the reorder point). Format: #,0
+// Shelves (store and item) on the reorder list that day: stock plus orders on the way at or
+// under the reorder point. Format: #,0  Folder: 1 Reorder list
 Items to Reorder =
 VAR Day = [Selected Day]
 RETURN
     CALCULATE ( COUNTROWS ( StockRule ), StockRule[order_qty] > 0, 'Date'[Date] = Day )
 
-// Units the reorder list says to order that day, all items together. Format: #,0
+// Units the reorder list says to order that day, all shelves together.
+// Format: #,0  Folder: 1 Reorder list
 Units to Order =
 VAR Day = [Selected Day]
 RETURN
     CALCULATE ( SUM ( StockRule[order_qty] ), 'Date'[Date] = Day )
 
-// Store-items whose shelf closed empty that day. Format: #,0
+// Shelves that closed empty that day. Format: #,0  Folder: 1 Reorder list
 Out of Stock Items =
 VAR Day = [Selected Day]
-RETURN
+VAR EmptyShelves =
     CALCULATE ( COUNTROWS ( StockRule ), StockRule[on_hand] = 0, 'Date'[Date] = Day )
+RETURN
+    COALESCE ( EmptyShelves, 0 )
 
-// Store-items that day (500 when no store or status is picked); split by status in the status chart. Format: #,0
+// Shelves that day (500 with no store picked); split by status in the status chart.
+// Format: #,0  Folder: 1 Reorder list
 Store Items =
 VAR Day = [Selected Day]
 RETURN
     CALCULATE ( COUNTROWS ( StockRule ), 'Date'[Date] = Day )
 
-// Value of the stock on the shelves at closing that day, at cost. Format: #,0
+// Value of the stock on the shelves at closing that day, at cost. Also on page 3.
+// Format: #,0  Folder: 1 Reorder list
 Stock Value =
 VAR Day = [Selected Day]
 RETURN
     CALCULATE ( SUM ( StockRule[stock_value] ), 'Date'[Date] = Day )
 
-// Stock value in slow stock that day: items with more than 30 days of cover. Format: #,0
-Slow Stock Value = CALCULATE ( [Stock Value], Status[status] = "Overstock" )
+// ---------- Page 2: Stock vs reorder point (display folder: 2 Stock vs reorder point) ----------
 
-// Share of that day's stock value sitting in slow stock; per month it is the month-end share. Format: 0.0%
-Slow Stock Share =
-VAR Slow = [Slow Stock Value]
-VAR AllStock = CALCULATE ( [Stock Value], REMOVEFILTERS ( Status ) )
-RETURN
-    DIVIDE ( Slow, AllStock )
+// Units sold over the days in view. Format: #,0  Folder: 2 Stock vs reorder point
+Units Sold =
+SUM ( StockRule[units_sold] )
 
-
-// ===================== Display folder: History =====================
-// Over the days in view (the date range slicer on page 2).
-
-// Units sold over the days in view. Format: #,0
-Units Sold = SUM ( StockRule[units_sold] )
-
-// Days a shelf closed empty, counted per store and item. Format: #,0
+// Days a shelf closed empty, counted per store and item, over the days in view.
+// Format: #,0  Folder: 2 Stock vs reorder point
 Empty Shelf Days =
-VAR EmptyRows = CALCULATE ( COUNTROWS ( StockRule ), StockRule[on_hand] = 0 )
+VAR EmptyRows =
+    CALCULATE ( COUNTROWS ( StockRule ), StockRule[on_hand] = 0 )
 RETURN
     COALESCE ( EmptyRows, 0 )
 
-// Stock on the shelf at closing (one store and item: that shelf; more: added up). Format: #,0
-Stock On Hand = SUM ( StockRule[on_hand] )
+// Stock on the shelf at closing; with one store and item picked, that shelf's line.
+// Format: #,0  Folder: 2 Stock vs reorder point
+Stock On Hand =
+SUM ( StockRule[on_hand] )
 
-// The reorder point (one store and item: that shelf's line). Format: #,0
-Reorder Point = SUM ( StockRule[reorder_point] )
+// The reorder point; with one store and item picked, that shelf's line.
+// Format: #,0  Folder: 2 Stock vs reorder point
+Reorder Point =
+SUM ( StockRule[reorder_point] )
 
-// The safety stock (one store and item: that shelf's line). Format: #,0
-Safety Stock = SUM ( StockRule[safety_stock] )
+// The safety stock; with one store and item picked, that shelf's line.
+// Format: #,0  Folder: 2 Stock vs reorder point
+Safety Stock =
+SUM ( StockRule[safety_stock] )
 
-// Stock on the days the item was on the reorder list, blank on the others: the chart's alert dots. Format: #,0
-Stock When Flagged = CALCULATE ( [Stock On Hand], StockRule[order_qty] > 0 )
+// Stock on the days the shelf was on the reorder list, blank on the others: the chart's alert
+// dots. Format: #,0  Folder: 2 Stock vs reorder point
+Stock When Flagged =
+CALCULATE ( [Stock On Hand], StockRule[order_qty] > 0 )
+
+
+// ---------- Page 3: Slow stock (display folder: 3 Slow stock) ----------
+// Page 3 also uses Stock Value from page 1; page 1 also shows Slow Stock Share.
+
+// Stock value that day in slow stock: shelves with more than 30 days of cover.
+// Format: #,0  Folder: 3 Slow stock
+Slow Stock Value =
+CALCULATE ( [Stock Value], Status[status] = "Overstock" )
+
+// Share of the day's stock value sitting in slow stock. On a month axis it is the month-end
+// share. Also a card on page 1. Format: 0.0%  Folder: 3 Slow stock
+Slow Stock Share =
+VAR SlowValue = [Slow Stock Value]
+VAR AllValue = CALCULATE ( [Stock Value], REMOVEFILTERS ( Status ) )
+RETURN
+    DIVIDE ( SlowValue, AllValue )
