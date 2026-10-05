@@ -73,7 +73,7 @@ every day of the history:
   each month of 2017 it ranged from 8% in July to 42% in January.
 
 <p align="center"><img width="100%" src="docs/chart-best-seller-summer.png" alt="Store 1, item 15, a best seller, summer 2017: each Friday's delivery barely clears the reorder point, the item is on the reorder list on the weekend and the shelf is empty on Thursdays."></p>
-<p align="center"><img width="100%" src="docs/chart-stockouts-per-month.png" alt="Stock-outs per month, 2013 to 2017: they come every summer; the amber part was flagged in time."></p>
+<p align="center"><img width="100%" src="docs/chart-stockouts-per-month.png" alt="Stock-outs per month, 2013 to 2017: they come every summer; the teal part was flagged in time."></p>
 <p align="center"><img width="100%" src="docs/chart-stock-value-by-status.png" alt="Stock value by status on 31 Dec 2017: 63% OK, 37% overstock."></p>
 
 Every number above is computed in [`analysis/analysis.ipynb`](analysis/analysis.ipynb) (saved with
