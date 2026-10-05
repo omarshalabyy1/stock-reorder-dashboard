@@ -1,0 +1,90 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "pg03SlowStock",
+  "displayName": "Slow stock",
+  "displayOption": "FitToPage",
+  "width": 1280,
+  "height": 720,
+  "visualInteractions": [
+    {
+      "source": "v02SlicerDay",
+      "target": "v03SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v02SlicerDay",
+      "target": "v09LineSlowShareMonthEnd",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v03SlicerStore",
+      "target": "v02SlicerDay",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v07BarValueByStatus",
+      "target": "v02SlicerDay",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v07BarValueByStatus",
+      "target": "v03SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v07BarValueByStatus",
+      "target": "v08BarTopSlowItems",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v07BarValueByStatus",
+      "target": "v09LineSlowShareMonthEnd",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v08BarTopSlowItems",
+      "target": "v02SlicerDay",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v08BarTopSlowItems",
+      "target": "v03SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09LineSlowShareMonthEnd",
+      "target": "v02SlicerDay",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09LineSlowShareMonthEnd",
+      "target": "v03SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09LineSlowShareMonthEnd",
+      "target": "v04CardStockValue",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09LineSlowShareMonthEnd",
+      "target": "v05CardSlowValue",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09LineSlowShareMonthEnd",
+      "target": "v06CardSlowShare",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09LineSlowShareMonthEnd",
+      "target": "v07BarValueByStatus",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09LineSlowShareMonthEnd",
+      "target": "v08BarTopSlowItems",
+      "type": "NoFilter"
+    }
+  ]
+}

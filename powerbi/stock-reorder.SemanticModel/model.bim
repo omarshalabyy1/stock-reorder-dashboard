@@ -1,0 +1,439 @@
+{
+  "compatibilityLevel": 1567,
+  "model": {
+    "culture": "en-US",
+    "dataAccessOptions": {
+      "legacyRedirects": true,
+      "returnErrorValuesAsNull": true
+    },
+    "defaultPowerBIDataSourceVersion": "powerBI_V3",
+    "sourceQueryCulture": "en-US",
+    "tables": [
+      {
+        "name": "StockRule",
+        "columns": [
+          {
+            "name": "date",
+            "dataType": "dateTime",
+            "sourceColumn": "date",
+            "summarizeBy": "none",
+            "formatString": "d mmm yyyy",
+            "isHidden": true
+          },
+          {
+            "name": "store",
+            "dataType": "int64",
+            "sourceColumn": "store",
+            "summarizeBy": "none",
+            "formatString": "0",
+            "isHidden": true
+          },
+          {
+            "name": "item",
+            "dataType": "int64",
+            "sourceColumn": "item",
+            "summarizeBy": "none",
+            "formatString": "0",
+            "isHidden": true
+          },
+          {
+            "name": "units_sold",
+            "dataType": "int64",
+            "sourceColumn": "units_sold",
+            "summarizeBy": "sum",
+            "formatString": "#,0",
+            "isHidden": true
+          },
+          {
+            "name": "units_received",
+            "dataType": "int64",
+            "sourceColumn": "units_received",
+            "summarizeBy": "sum",
+            "formatString": "#,0",
+            "isHidden": true
+          },
+          {
+            "name": "on_hand",
+            "dataType": "int64",
+            "sourceColumn": "on_hand",
+            "summarizeBy": "none",
+            "formatString": "#,0"
+          },
+          {
+            "name": "on_order",
+            "dataType": "int64",
+            "sourceColumn": "on_order",
+            "summarizeBy": "none",
+            "formatString": "#,0"
+          },
+          {
+            "name": "stock_value",
+            "dataType": "decimal",
+            "sourceColumn": "stock_value",
+            "summarizeBy": "sum",
+            "formatString": "#,0",
+            "isHidden": true
+          },
+          {
+            "name": "daily_demand",
+            "dataType": "double",
+            "sourceColumn": "daily_demand",
+            "summarizeBy": "none",
+            "formatString": "#,0.00",
+            "isHidden": true
+          },
+          {
+            "name": "safety_stock",
+            "dataType": "double",
+            "sourceColumn": "safety_stock",
+            "summarizeBy": "none",
+            "formatString": "#,0",
+            "isHidden": true
+          },
+          {
+            "name": "reorder_point",
+            "dataType": "double",
+            "sourceColumn": "reorder_point",
+            "summarizeBy": "none",
+            "formatString": "#,0"
+          },
+          {
+            "name": "days_of_cover",
+            "dataType": "double",
+            "sourceColumn": "days_of_cover",
+            "summarizeBy": "none",
+            "formatString": "0.0"
+          },
+          {
+            "name": "status",
+            "dataType": "string",
+            "sourceColumn": "status",
+            "summarizeBy": "none",
+            "isHidden": true
+          },
+          {
+            "name": "order_qty",
+            "dataType": "int64",
+            "sourceColumn": "order_qty",
+            "summarizeBy": "none",
+            "formatString": "#,0"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "StockRule",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = PostgreSQL.Database(\"127.0.0.1:5447\", \"stock\", [Query = \"SELECT date, store, item, units_sold, units_received, on_hand, on_order, stock_value, daily_demand, safety_stock, reorder_point, days_of_cover, status, order_qty FROM stock_rule\"]),",
+                "    ChangedTypes = Table.TransformColumnTypes(Source, {{\"date\", type date}, {\"store\", Int64.Type}, {\"item\", Int64.Type}, {\"units_sold\", Int64.Type}, {\"units_received\", Int64.Type}, {\"on_hand\", Int64.Type}, {\"on_order\", Int64.Type}, {\"stock_value\", Currency.Type}, {\"daily_demand\", type number}, {\"safety_stock\", type number}, {\"reorder_point\", type number}, {\"days_of_cover\", type number}, {\"status\", type text}, {\"order_qty\", Int64.Type}})",
+                "in",
+                "    ChangedTypes"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Item",
+        "columns": [
+          {
+            "name": "item",
+            "dataType": "int64",
+            "sourceColumn": "item",
+            "summarizeBy": "none",
+            "formatString": "0"
+          },
+          {
+            "name": "unit_cost",
+            "dataType": "decimal",
+            "sourceColumn": "unit_cost",
+            "summarizeBy": "none",
+            "formatString": "#,0.00",
+            "isHidden": true
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Item",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = PostgreSQL.Database(\"127.0.0.1:5447\", \"stock\", [Query = \"SELECT item, unit_cost FROM item\"]),",
+                "    ChangedTypes = Table.TransformColumnTypes(Source, {{\"item\", Int64.Type}, {\"unit_cost\", Currency.Type}})",
+                "in",
+                "    ChangedTypes"
+              ]
+            }
+          }
+        ]
+      },
+      {
+        "name": "Store",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "store",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "StockRule[store]",
+            "summarizeBy": "none",
+            "formatString": "0"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Store",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "DISTINCT ( StockRule[store] )"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Status",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "status",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[status]",
+            "summarizeBy": "none",
+            "sortByColumn": "Status Order"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Status Order",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Status Order]",
+            "summarizeBy": "none",
+            "formatString": "0",
+            "isHidden": true
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Status",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "DATATABLE (\n    \"status\", STRING,\n    \"Status Order\", INTEGER,\n    {\n        { \"Out of stock\", 1 },\n        { \"Reorder\", 2 },\n        { \"OK\", 3 },\n        { \"Overstock\", 4 },\n        { \"Dead\", 5 }\n    }\n)"
+            }
+          }
+        ]
+      },
+      {
+        "name": "Date",
+        "dataCategory": "Time",
+        "columns": [
+          {
+            "type": "calculatedTableColumn",
+            "name": "Date",
+            "dataType": "dateTime",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Date]",
+            "summarizeBy": "none",
+            "formatString": "d mmm yyyy",
+            "isKey": true
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Month",
+            "dataType": "string",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Month]",
+            "summarizeBy": "none",
+            "sortByColumn": "Month Number"
+          },
+          {
+            "type": "calculatedTableColumn",
+            "name": "Month Number",
+            "dataType": "int64",
+            "isNameInferred": true,
+            "isDataTypeInferred": true,
+            "sourceColumn": "[Month Number]",
+            "summarizeBy": "none",
+            "formatString": "0",
+            "isHidden": true
+          }
+        ],
+        "partitions": [
+          {
+            "name": "Date",
+            "mode": "import",
+            "source": {
+              "type": "calculated",
+              "expression": "VAR FirstDay = MIN ( StockRule[date] )\nVAR LastDay = MAX ( StockRule[date] )\nRETURN\n    ADDCOLUMNS (\n        CALENDAR ( FirstDay, LastDay ),\n        \"Month\", FORMAT ( [Date], \"mmm yyyy\" ),\n        \"Month Number\", YEAR ( [Date] ) * 100 + MONTH ( [Date] )\n    )"
+            }
+          }
+        ]
+      },
+      {
+        "name": "_Measures",
+        "columns": [
+          {
+            "name": "Column1",
+            "dataType": "string",
+            "sourceColumn": "Column1",
+            "summarizeBy": "none",
+            "isHidden": true
+          }
+        ],
+        "partitions": [
+          {
+            "name": "_Measures",
+            "mode": "import",
+            "source": {
+              "type": "m",
+              "expression": [
+                "let",
+                "    Source = #table(type table [Column1 = text], {})",
+                "in",
+                "    Source"
+              ]
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "Selected Day",
+            "expression": "MAX ( 'Date'[Date] )",
+            "formatString": "d mmm yyyy",
+            "displayFolder": "1 Reorder list"
+          },
+          {
+            "name": "Items to Reorder",
+            "expression": "VAR Day = [Selected Day]\nRETURN\n    CALCULATE ( COUNTROWS ( StockRule ), StockRule[order_qty] > 0, 'Date'[Date] = Day )",
+            "formatString": "#,0",
+            "displayFolder": "1 Reorder list"
+          },
+          {
+            "name": "Units to Order",
+            "expression": "VAR Day = [Selected Day]\nRETURN\n    CALCULATE ( SUM ( StockRule[order_qty] ), 'Date'[Date] = Day )",
+            "formatString": "#,0",
+            "displayFolder": "1 Reorder list"
+          },
+          {
+            "name": "Out of Stock Items",
+            "expression": "VAR Day = [Selected Day]\nVAR EmptyShelves =\n    CALCULATE ( COUNTROWS ( StockRule ), StockRule[on_hand] = 0, 'Date'[Date] = Day )\nRETURN\n    COALESCE ( EmptyShelves, 0 )",
+            "formatString": "#,0",
+            "displayFolder": "1 Reorder list"
+          },
+          {
+            "name": "Store Items",
+            "expression": "VAR Day = [Selected Day]\nRETURN\n    CALCULATE ( COUNTROWS ( StockRule ), 'Date'[Date] = Day )",
+            "formatString": "#,0",
+            "displayFolder": "1 Reorder list"
+          },
+          {
+            "name": "Stock Value",
+            "expression": "VAR Day = [Selected Day]\nRETURN\n    CALCULATE ( SUM ( StockRule[stock_value] ), 'Date'[Date] = Day )",
+            "formatString": "#,0",
+            "displayFolder": "1 Reorder list"
+          },
+          {
+            "name": "Units Sold",
+            "expression": "SUM ( StockRule[units_sold] )",
+            "formatString": "#,0",
+            "displayFolder": "2 Stock vs reorder point"
+          },
+          {
+            "name": "Empty Shelf Days",
+            "expression": "VAR EmptyRows =\n    CALCULATE ( COUNTROWS ( StockRule ), StockRule[on_hand] = 0 )\nRETURN\n    COALESCE ( EmptyRows, 0 )",
+            "formatString": "#,0",
+            "displayFolder": "2 Stock vs reorder point"
+          },
+          {
+            "name": "Stock On Hand",
+            "expression": "SUM ( StockRule[on_hand] )",
+            "formatString": "#,0",
+            "displayFolder": "2 Stock vs reorder point"
+          },
+          {
+            "name": "Reorder Point",
+            "expression": "SUM ( StockRule[reorder_point] )",
+            "formatString": "#,0",
+            "displayFolder": "2 Stock vs reorder point"
+          },
+          {
+            "name": "Safety Stock",
+            "expression": "SUM ( StockRule[safety_stock] )",
+            "formatString": "#,0",
+            "displayFolder": "2 Stock vs reorder point"
+          },
+          {
+            "name": "Stock When Flagged",
+            "expression": "CALCULATE ( [Stock On Hand], StockRule[order_qty] > 0 )",
+            "formatString": "#,0",
+            "displayFolder": "2 Stock vs reorder point"
+          },
+          {
+            "name": "Slow Stock Value",
+            "expression": "CALCULATE ( [Stock Value], Status[status] = \"Overstock\" )",
+            "formatString": "#,0",
+            "displayFolder": "3 Slow stock"
+          },
+          {
+            "name": "Slow Stock Share",
+            "expression": "VAR SlowValue = [Slow Stock Value]\nVAR AllValue = CALCULATE ( [Stock Value], REMOVEFILTERS ( Status ) )\nRETURN\n    DIVIDE ( SlowValue, AllValue )",
+            "formatString": "0.0%",
+            "displayFolder": "3 Slow stock"
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "8b743786-faf5-4420-9d91-00437a44bc53",
+        "fromTable": "StockRule",
+        "fromColumn": "date",
+        "toTable": "Date",
+        "toColumn": "Date"
+      },
+      {
+        "name": "8100fc6b-3f1e-4040-8cd6-b73443a9b602",
+        "fromTable": "StockRule",
+        "fromColumn": "store",
+        "toTable": "Store",
+        "toColumn": "store"
+      },
+      {
+        "name": "2485b104-f747-4ae4-87e3-55aac54f69d3",
+        "fromTable": "StockRule",
+        "fromColumn": "item",
+        "toTable": "Item",
+        "toColumn": "item"
+      },
+      {
+        "name": "47b4d34c-7648-418c-867d-3b59205e84eb",
+        "fromTable": "StockRule",
+        "fromColumn": "status",
+        "toTable": "Status",
+        "toColumn": "status"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "__PBI_TimeIntelligenceEnabled",
+        "value": "0"
+      },
+      {
+        "name": "PBI_QueryOrder",
+        "value": "[\"StockRule\",\"Item\",\"_Measures\"]"
+      }
+    ]
+  }
+}

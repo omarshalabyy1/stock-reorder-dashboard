@@ -1,0 +1,85 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "pg02StockVsReorderPoint",
+  "displayName": "Stock vs reorder point",
+  "displayOption": "FitToPage",
+  "width": 1280,
+  "height": 720,
+  "visualInteractions": [
+    {
+      "source": "v02SlicerStore",
+      "target": "v03SlicerItem",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v02SlicerStore",
+      "target": "v04SlicerDays",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v03SlicerItem",
+      "target": "v02SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v03SlicerItem",
+      "target": "v04SlicerDays",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v04SlicerDays",
+      "target": "v02SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v04SlicerDays",
+      "target": "v03SlicerItem",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v07LineStockVsReorderPoint",
+      "target": "v02SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v07LineStockVsReorderPoint",
+      "target": "v03SlicerItem",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v07LineStockVsReorderPoint",
+      "target": "v04SlicerDays",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v07LineStockVsReorderPoint",
+      "target": "v05CardEmptyShelfDays",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v07LineStockVsReorderPoint",
+      "target": "v06CardUnitsSold",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v07LineStockVsReorderPoint",
+      "target": "v08ColumnEmptyDaysByMonth",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v08ColumnEmptyDaysByMonth",
+      "target": "v02SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v08ColumnEmptyDaysByMonth",
+      "target": "v03SlicerItem",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v08ColumnEmptyDaysByMonth",
+      "target": "v04SlicerDays",
+      "type": "NoFilter"
+    }
+  ]
+}

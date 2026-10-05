@@ -1,0 +1,11 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/gitIntegration/platformProperties/2.0.0/schema.json",
+  "metadata": {
+    "type": "SemanticModel",
+    "displayName": "stock-reorder"
+  },
+  "config": {
+    "version": "2.0",
+    "logicalId": "05788fd7-234b-44cd-9390-61c01ff885ff"
+  }
+}

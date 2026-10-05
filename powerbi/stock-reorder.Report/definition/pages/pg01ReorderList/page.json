@@ -1,0 +1,95 @@
+{
+  "$schema": "https://developer.microsoft.com/json-schemas/fabric/item/report/definition/page/2.0.0/schema.json",
+  "name": "pg01ReorderList",
+  "displayName": "Reorder list",
+  "displayOption": "FitToPage",
+  "width": 1280,
+  "height": 720,
+  "visualInteractions": [
+    {
+      "source": "v02SlicerDay",
+      "target": "v03SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v03SlicerStore",
+      "target": "v02SlicerDay",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09TableReorderList",
+      "target": "v02SlicerDay",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09TableReorderList",
+      "target": "v03SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09TableReorderList",
+      "target": "v04CardItemsToReorder",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09TableReorderList",
+      "target": "v05CardUnitsToOrder",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09TableReorderList",
+      "target": "v06CardEmptyShelves",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09TableReorderList",
+      "target": "v07CardStockValue",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09TableReorderList",
+      "target": "v08CardSlowShare",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v09TableReorderList",
+      "target": "v10BarShelvesByStatus",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v10BarShelvesByStatus",
+      "target": "v02SlicerDay",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v10BarShelvesByStatus",
+      "target": "v03SlicerStore",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v10BarShelvesByStatus",
+      "target": "v04CardItemsToReorder",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v10BarShelvesByStatus",
+      "target": "v05CardUnitsToOrder",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v10BarShelvesByStatus",
+      "target": "v06CardEmptyShelves",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v10BarShelvesByStatus",
+      "target": "v07CardStockValue",
+      "type": "NoFilter"
+    },
+    {
+      "source": "v10BarShelvesByStatus",
+      "target": "v08CardSlowShare",
+      "type": "NoFilter"
+    }
+  ]
+}
