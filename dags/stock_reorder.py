@@ -18,7 +18,8 @@ SCHEDULE = load_config()["schedule"]
 
 
 @dag(schedule=SCHEDULE["cron"], start_date=pendulum.datetime(2026, 10, 1, tz=SCHEDULE["timezone"]),
-     catchup=False, max_active_runs=1, is_paused_upon_creation=False)
+     catchup=False, max_active_runs=1, is_paused_upon_creation=False,
+     default_args={"retries": 1, "retry_delay": pendulum.duration(minutes=2)})
 def stock_reorder():
     @task
     def load():

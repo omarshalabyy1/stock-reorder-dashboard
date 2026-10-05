@@ -11,7 +11,7 @@ Before the warehouse is touched, `pipeline.py` checks each file and stops with o
 missing input file data/input/item.csv (inputs.items in config/client.yaml)
 data/input/stock.csv is missing column(s): on_order
 Key (item)=(51) is not present in table "item".
-3 store-items have a missing day in the sales file
+1 store-item(s) with a missing day in the sales file
 ```
 
 ## Sales (`inputs.sales`)

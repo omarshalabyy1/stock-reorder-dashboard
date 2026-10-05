@@ -77,7 +77,7 @@ def load():
         if no_sales:
             raise SystemExit(f"{no_sales} stock rows have no sales row")
         if gaps:
-            raise SystemExit(f"{gaps} store-items have a missing day in the sales file")
+            raise SystemExit(f"{gaps} store-item(s) with a missing day in the sales file")
 
 
 def forecast():
