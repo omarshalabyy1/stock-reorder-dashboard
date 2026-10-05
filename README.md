@@ -10,9 +10,6 @@
   <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Compose">
 </p>
 
-**New client?** See [docs/new-client.md](docs/new-client.md): this repo is a template, and a client changes only
-`config/client.yaml`, `.env` and the files in `data/input/`.
-
 ## The problem
 
 Best sellers run out before anyone notices, while slow items fill the shelves. Stock is counted by
