@@ -8,8 +8,9 @@
 #   docker compose up -d     # Airflow http://127.0.0.1:8097 (no login), warehouse localhost:5447
 #   docker compose down      # stops everything; the volumes (warehouse, run history) stay
 #
-# The email settings come from .env (gitignored; see .env.example). Without them the email is
-# only saved to out/.
+# DB_PASSWORD and the email settings come from .env (gitignored; see .env.example). Without the
+# email settings the email is only saved to out/. The warehouse user, database and port match
+# warehouse.* in config/client.yaml: change both together.
 
 name: stock-reorder
 
@@ -19,7 +20,7 @@ services:
     restart: unless-stopped
     environment:
       POSTGRES_USER: stock
-      POSTGRES_PASSWORD: stock      # local only, public and generated data (pipeline.py)
+      POSTGRES_PASSWORD: ${DB_PASSWORD:?set in .env}
       POSTGRES_DB: stock
     ports:
       - "127.0.0.1:5447:5432"
@@ -54,11 +55,11 @@ services:
       bash -c "airflow db migrate && { airflow scheduler & airflow dag-processor & airflow api-server --port 8080 & wait -n; exit 1; }"
     restart: unless-stopped
     environment:
-      WAREHOUSE_HOST: warehouse
+      WAREHOUSE_HOST: warehouse     # config.py prefers these two inside the Docker network
       WAREHOUSE_PORT: "5432"
+      DB_PASSWORD: ${DB_PASSWORD:?set in .env}
       GMAIL_USER: ${GMAIL_USER:-}
       GMAIL_APP_PASSWORD: ${GMAIL_APP_PASSWORD:-}
-      MAIL_TO: ${MAIL_TO:-}
       AIRFLOW__CORE__LOAD_EXAMPLES: "false"
       AIRFLOW__CORE__SIMPLE_AUTH_MANAGER_ALL_ADMINS: "true"
       AIRFLOW__DATABASE__SQL_ALCHEMY_CONN: postgresql+psycopg2://airflow:airflow@airflow-db:5432/airflow

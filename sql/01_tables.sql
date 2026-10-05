@@ -3,7 +3,8 @@
 
 CREATE TABLE IF NOT EXISTS item (           -- one row per item
     item       int PRIMARY KEY,
-    unit_cost  numeric(8, 2) NOT NULL CHECK (unit_cost > 0)
+    unit_cost  numeric(8, 2) NOT NULL CHECK (unit_cost > 0),
+    lead_days  int NOT NULL CHECK (lead_days > 0)          -- days the supplier takes to deliver
 );
 
 CREATE TABLE IF NOT EXISTS sales (          -- one row per day, store and item

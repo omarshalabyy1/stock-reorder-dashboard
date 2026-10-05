@@ -10,6 +10,9 @@
   <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Compose">
 </p>
 
+**New client?** See [docs/new-client.md](docs/new-client.md): this repo is a template, and a client changes only
+`config/client.yaml`, `.env` and the files in `data/input/`.
+
 ## The problem
 
 Best sellers run out before anyone notices, while slow items fill the shelves. Stock is counted by
@@ -45,6 +48,9 @@ and the analysis all read them from there.
 | Days of cover | on hand ÷ daily demand | how long the shelf lasts at the current pace |
 | Status | Out of stock · Dead (no sale in 28 days) · Reorder · Overstock (over 30 days of cover) · OK | one word per shelf, every day |
 
+These are the demo's settings: the `rules` in [`config/client.yaml`](config/client.yaml) and each
+item's delivery time (`lead_days`, 4 days in the demo) in the items file.
+
 ## 📈 The result
 
 **913,000 sales rows** (10 stores × 50 items × every day of 5 years), with the rule replayed over
@@ -53,7 +59,8 @@ every day of the history:
 - **4,052 stock-outs** happened under the weekly hand count. The rule had flagged every one of them
   in the 7 days before, and **1,643 (41%) early enough to order in time**. A flag is raised at
   closing, the order goes in the next morning, and the supplier delivers 4 days later, so "in time"
-  needs 5 days of warning.
+  needs 5 days of warning. (The first run counted 4 days as enough and got 4,047 of 4,052; that
+  ignored the night between the flag and the order, so it was corrected to 5.)
 - **Why not more:** 91% of the stock-outs fall on a Thursday, the day before the Friday delivery. A
   shelf that crosses the reorder point on Saturday is caught in time; one that crosses on Sunday is
   flagged one day too late. Best sellers got a median of 4 days of warning.
@@ -98,7 +105,8 @@ You need Python 3.10+ and Docker Desktop.
 
 ```bash
 pip install -r requirements.txt
-python data/make_data.py        # downloads the sales, generates the stock: data/raw/
+cp .env.example .env           # then set DB_PASSWORD (and the Gmail lines for a real email)
+python data/demo/make_data.py   # the demo's input files: downloads the sales, generates the stock
 docker compose up -d            # the warehouse on localhost:5447, Airflow on http://127.0.0.1:8097
 python pipeline.py              # load, forecast, rules, alert (or Trigger stock_reorder in Airflow)
 jupyter nbconvert --to notebook --execute --inplace analysis/analysis.ipynb
@@ -110,7 +118,9 @@ stops the run if a stock row has no sales row or a day is missing.
 
 | Path | What it is |
 |---|---|
-| `data/make_data.py` | the three daily exports: sales, stock, item |
+| `config/client.yaml`, `config.py` | every client value, read only through `load_config()` |
+| `data/input/` | the three input files: sales, stock, items ([what each holds](data/input/README.md)) |
+| `data/demo/make_data.py` | makes the demo's input files |
 | `sql/01_tables.sql` | the warehouse tables, with keys and checks |
 | `sql/02_forecast.sql`, `sql/03_rules.sql` | the forecast and the rules |
 | `pipeline.py` | the four steps: load, forecast, rules, alert |
@@ -123,7 +133,7 @@ stops the run if a stock row has no sales row or a day is missing.
 - **Sales:** the public [Store Item Demand Forecasting](https://www.kaggle.com/competitions/demand-forecasting-kernels-only)
   file (10 stores, 50 items, daily, 2013 to 2017), downloaded from a pinned GitHub copy and checked
   by its SHA-256. It is not stored in this repo.
-- **Stock, deliveries and unit costs are generated** by `data/make_data.py`. It replays the stores'
+- **Stock, deliveries, unit costs and lead times are generated** by `data/demo/make_data.py`. It replays the stores'
   current habit: every Monday each store tops every item back up to the same shelf level (three
   weeks of its average item's sales the year before), and the supplier delivers 4 days later. A
   shelf can only sell what it holds, so sales stop when it is empty.

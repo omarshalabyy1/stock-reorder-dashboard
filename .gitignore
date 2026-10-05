@@ -1,5 +1,6 @@
 .env
 __pycache__/
 .ipynb_checkpoints/
-data/raw/
+data/input/*.csv
+data/demo/store_item_demand.csv
 out/

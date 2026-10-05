@@ -1,0 +1,44 @@
+# Everything a client changes, except secrets (those go in .env).
+# Read only through config.py (load_config). A key exists here only if something reads it.
+
+client:
+  name: Sample stores                # notebook chart titles and the email subject
+  currency: USD                      # the label printed with stock values
+
+warehouse:                           # as seen from your laptop; the password is DB_PASSWORD in .env
+  host: 127.0.0.1
+  port: 5447                         # if you change it, change the ports line in docker-compose.yml too
+  database: stock                    # if you change it or the user, change docker-compose.yml too
+  user: stock
+
+inputs:                              # file names in data/input/ (columns: data/input/README.md)
+  sales: sales.csv
+  stock: stock.csv
+  items: item.csv
+
+rules:                               # the stock rules in sql/02_forecast.sql and sql/03_rules.sql
+  forecast_days: 28                  # daily demand = the average of the last this many days of sales
+  service_z: 1.65                    # safety stock covers this share of demand swings: 1.65 = 95%, 2.05 = 98%
+  cover_days_after_delivery: 7       # an order lasts until the delivery and this many days after it
+  overstock_days: 30                 # more than this many days of stock on the shelf is overstock
+  warning_window_days: 7             # the backtest looks this many days back from a stock-out for a flag
+
+schedule:                            # when Airflow runs load, forecast, rules and alert
+  cron: "0 7 * * *"
+  timezone: Africa/Cairo
+
+alert:
+  mail_to: ""                        # who gets the reorder email; empty = GMAIL_USER in .env
+
+report:
+  title: Stock reorder dashboard     # the Power BI theme name
+  best_sellers: 10                   # how many items, most units sold first, count as best sellers
+  check_days: ["2017-12-31", "2017-07-16"]   # the days powerbi/06-checks.md and the notebook's section 7 use
+  check_shelf: {store: 1, item: 15, from: "2017-06-01", to: "2017-08-31"}   # the shelf and days of page 2
+  colours:                           # the Power BI theme (python theme.py) and the notebook charts
+    data: ["#2563EB", "#0E1630", "#8DB0FF", "#4A5675", "#1D4FD7", "#C7D7FE"]   # 1st = main series
+    text: "#0E1630"
+    muted: "#4A5675"
+    page: "#F4F6FB"
+    line: "#E2E7F1"
+    danger: "#C2410C"

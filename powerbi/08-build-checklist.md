@@ -6,7 +6,7 @@ it is off, fix that step first.
 ## Prepare the warehouse
 
 1. In the repo folder (`C:\Users\DELL\GitHub\stock-reorder-dashboard`), on a fresh clone only, make
-   the data: `python data/make_data.py`.
+   the demo data: `python data/demo/make_data.py` (a client puts their files in `data/input/` instead).
    **Check:** it prints `913,000 sales rows, 913,000 stock rows, 50 items`.
 2. Start Docker Desktop, then run `docker compose up -d`. Wait a minute or two, then open Airflow at
    http://127.0.0.1:8097 (no login).
@@ -28,7 +28,7 @@ it is off, fix that step first.
 ## Power Query (`01-power-query.md`)
 
 9. **Home > Transform data**. Create the two queries in this order, pasting each one's M code:
-   `StockRule`, `Item`. Answer the first-connection questions (user `stock`, password `stock`, no
+   `StockRule`, `Item`. Answer the first-connection questions (user `warehouse.user`, password `DB_PASSWORD` from `.env`, no
    encryption, **Run** the native query).
 10. **Home > Close & apply** (about half a minute).
 11. Open **Table view** (second icon on the left) and click each table; the row count is at the

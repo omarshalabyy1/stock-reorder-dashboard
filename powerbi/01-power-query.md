@@ -33,8 +33,8 @@ The three small tables (`Date`, `Store`, `Status`) are DAX tables made in the mo
 
 Power BI asks three things the first time a query runs:
 
-1. **Credentials:** choose **Database**, user name `stock`, password `stock` (the local warehouse in
-   `docker-compose.yml`, reachable only from this laptop), level `127.0.0.1:5447;stock`, **Connect**.
+1. **Credentials:** choose **Database**, user name = `warehouse.user` in `config/client.yaml` (`stock` in the
+   demo), password = `DB_PASSWORD` in `.env`, level `127.0.0.1:5447;stock`, **Connect**.
 2. **Encryption:** the local warehouse has no SSL certificate. If Power BI says it could not connect
    with an encrypted connection, choose **OK** to connect without encryption.
 3. **Native database query:** "Permission is required to run this native database query" > **Run**.
