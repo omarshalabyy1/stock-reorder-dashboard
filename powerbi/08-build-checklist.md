@@ -8,8 +8,8 @@ it is off, fix that step first.
 1. In the repo folder (`C:\Users\you\GitHub\stock-reorder-dashboard`), on a fresh clone only, make
    the demo data: `python data/demo/make_data.py` (a client puts their files in `data/input/` instead).
    **Check:** it prints `913,000 sales rows, 913,000 stock rows, 50 items`.
-2. Start Docker Desktop, then run `docker compose up -d`. Wait a minute or two, then open Airflow at
-   http://127.0.0.1:8097 (no login).
+2. Start Docker Desktop, then run `docker compose up -d`. Wait a minute or two, then open Airflow on
+   port 8097 (no login).
 3. In Airflow: **Dags > stock_reorder > Trigger**. Wait until load, forecast, rules and alert are all
    green (about 5 minutes). Instead of Airflow, `python pipeline.py` runs the same four steps.
 4. **Check:** `docker exec stock-reorder-warehouse-1 psql -U stock -d stock -c "SELECT count(*) FROM stock_rule"`

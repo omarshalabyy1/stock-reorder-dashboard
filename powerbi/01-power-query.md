@@ -1,6 +1,6 @@
 # 1. Power Query
 
-The report reads the local warehouse: PostgreSQL on `127.0.0.1:5447`, database `stock`, after
+The report reads the local warehouse: PostgreSQL on port 5447, database `stock`, after
 `docker compose up -d` and one run of the `stock_reorder` DAG (steps 1 to 4 of
 `08-build-checklist.md`). Nothing is read from files.
 

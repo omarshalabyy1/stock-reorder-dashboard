@@ -116,7 +116,7 @@ You need Python 3.10+ and Docker Desktop.
 pip install -r requirements.txt
 cp .env.example .env           # then set DB_PASSWORD (and the Gmail lines for a real email)
 python data/demo/make_data.py   # the demo's input files: downloads the sales, generates the stock
-docker compose up -d            # the warehouse on localhost:5447, Airflow on http://127.0.0.1:8097
+docker compose up -d            # the warehouse on port 5447, Airflow on port 8097
 python pipeline.py              # load, forecast, rules, alert (or Trigger stock_reorder in Airflow)
 jupyter nbconvert --to notebook --execute --inplace analysis/analysis.ipynb
 ```
