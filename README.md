@@ -137,6 +137,20 @@ stops the run if a stock row has no sales row or a day is missing.
 | `analysis/analysis.ipynb` | every number, and the charts |
 | `powerbi/` | the Power BI build guide |
 
+## 🏗️ For engineers
+
+Every table in the warehouse, the tables it is built from, and its row count after the Airflow run of 6 October 2026:
+
+![Data flow, table by table](docs/data-flow.svg)
+
+The star schema Power BI builds on top of it:
+
+![The star schema](docs/data-model.svg)
+
+The daily DAG in Airflow's graph view, every task green in the scheduled run for 5 October 2026, run on 6 October 2026:
+
+![Airflow graph view of stock_reorder: load, forecast, rules and alert, all successful](docs/airflow-dag.png)
+
 ## 🗂️ Data
 
 - **Sales:** the public [Store Item Demand Forecasting](https://www.kaggle.com/competitions/demand-forecasting-kernels-only)
