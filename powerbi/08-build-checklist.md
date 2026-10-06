@@ -5,7 +5,7 @@ it is off, fix that step first.
 
 ## Prepare the warehouse
 
-1. In the repo folder (`C:\Users\DELL\GitHub\stock-reorder-dashboard`), on a fresh clone only, make
+1. In the repo folder (`C:\Users\you\GitHub\stock-reorder-dashboard`), on a fresh clone only, make
    the demo data: `python data/demo/make_data.py` (a client puts their files in `data/input/` instead).
    **Check:** it prints `913,000 sales rows, 913,000 stock rows, 50 items`.
 2. Start Docker Desktop, then run `docker compose up -d`. Wait a minute or two, then open Airflow at
