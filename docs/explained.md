@@ -133,7 +133,7 @@ In the history nobody acts on the rule. The stock follows the stores' Monday hab
 
 ## 4. Every number, explained
 
-The notebook ([`analysis/analysis.ipynb`](../analysis/analysis.ipynb)) prints almost all of these. The cell numbers below count from 0, the first cell. Two README numbers are not printed by the notebook; for this guide they were checked by replaying the same rules on the input files with pandas, and the table says so.
+The notebook ([`analysis/analysis.ipynb`](../analysis/analysis.ipynb)) prints all of these. The cell numbers below count from 0, the first cell.
 
 ### The header and the result
 
@@ -145,8 +145,8 @@ The notebook ([`analysis/analysis.ipynb`](../analysis/analysis.ipynb)) prints al
 | **Flagged every one of them in the 7 days before** | The rule put every one of the 4,052 on the reorder list at least once in the 7 days before it. | Count of stock-outs with a flag 1 to 7 days before: 4,052 of 4,052. | notebook cell 5 |
 | **1,643 (41%) early enough to order in time** | The flag came with at least 5 days of warning. | Warning days were 3 days for 5 stock-outs, 4 for 2,404, 5 for 1,627 and 6 for 16. In time = 5 or 6 days: 1,627 + 16 = 1,643. 1,643 / 4,052 = 40.5%, shown as 41%. | notebook cell 5; SQL in `powerbi/06-checks.md` |
 | **5 days of warning** | What "in time" needs. | Lead time 4 days + 1 night between the flag at closing and the order next morning. | notebook cell 0 (the definition) and cell 5 (`lead_days + 1`) |
-| **4,047 of 4,052 (the first run)** | The first, wrong count, when 4 days of warning was taken as enough. | Stock-outs with 4 or more warning days: 2,404 + 1,627 + 16 = 4,047. | Not printed by the notebook (it only runs the corrected rule). Checked for this guide by replaying the rules. |
-| **91% on a Thursday** | Most stock-outs start the day before the Friday delivery. | 3,673 Thursday stock-outs / 4,052 = 90.6%, shown as 91%. The rest started on a Wednesday (376) or a Tuesday (3). | Not printed by the notebook. Checked for this guide by replaying the rules. |
+| **4,047 of 4,052 (the first run)** | The first, wrong count, when 4 days of warning was taken as enough. | Stock-outs with 4 or more warning days: 2,404 + 1,627 + 16 = 4,047. | notebook cell 24 (the first-run rule: warning days ≥ lead time) |
+| **91% on a Thursday** | Most stock-outs start the day before the Friday delivery. | 3,673 Thursday stock-outs / 4,052 = 90.6%, shown as 91%. The rest started on a Wednesday (376) or a Tuesday (3). | notebook cell 24 |
 | **Median of 4 days for best sellers** | Half the best sellers' stock-outs had 4 days of warning or less. | The 10 best sellers are items 15, 28, 13, 18, 25, 38, 22, 45, 36 and 8. They had 3,919 of the 4,052 stock-outs. The middle value of their warning days is 4. 41% of them were in time. | notebook cell 7 |
 | **37% of stock value in slow stock** | On the last day, 31 Dec 2017, over a third of the cash on the shelves was in shelves with more than 30 days of cover. | 2,842,562 Overstock / 7,707,022 all stock value = 36.9%, shown as 37%. The other 4,864,461 is OK. | notebook cell 9 |
 | **8% in July to 42% in January** | The same share at the end of each month of 2017. | Same division on each month's last day. Jan 42%, Feb 36%, Mar 29%, Apr 19%, May 18%, Jun 14%, Jul 8%, Aug 18%, Sep 18%, Oct 21%, Nov 20%, Dec 37%. | notebook cell 11 |
