@@ -14,6 +14,8 @@
   <img src="https://img.shields.io/badge/Docker-Compose-2496ED?style=for-the-badge&logo=docker&logoColor=white" alt="Docker Compose">
 </p>
 
+> 📖 **New to data?** [The project explained, from zero](docs/explained.md): every word, every number and the interview questions, in plain words.
+
 ## The problem
 
 Best sellers run out before anyone notices, while slow items fill the shelves. Stock is counted by
